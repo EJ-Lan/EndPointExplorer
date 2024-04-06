@@ -1,8 +1,10 @@
-﻿using EndPointExplorer.Utilities;
+﻿using EndPointExplorer.Models;
+using EndPointExplorer.Services;
+using EndPointExplorer.Utilities;
 
 class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         // Set initial console properties
         Console.Title = "API Testing Tool";
@@ -18,22 +20,77 @@ class Program
             switch (choice)
             {
                 case "1":
-                    // Handle GET request
-                    // You can call a method here that performs the GET operation
-                    ConsoleUtility.PrintSuccess("GET request executed.");
+                    var getUrl = ConsoleUtility.ReadInput("Enter URL: ");
+                    // For simplicity, headers and body are not included in a GET request
+                    var getRequest = new RequestModel
+                    {
+                        Url = getUrl,
+                        Method = "GET"
+                    };
+                    try
+                    {
+                        var getResponse = await new ApiRequester().SendRequestAsync(getRequest);
+                        ConsoleUtility.PrintSuccess($"Response: {getResponse}");
+                    }
+                    catch (Exception ex)
+                    {
+                        ConsoleUtility.PrintError($"Error: {ex.Message}");
+                    }
                     break;
                 case "2":
-                    // Handle POST request
-                    // Similar to the GET, call a method for the POST operation
-                    ConsoleUtility.PrintSuccess("POST request executed.");
+                    var postUrl = ConsoleUtility.ReadInput("Enter URL: ");
+                    var postBody = ConsoleUtility.ReadInput("Enter request body (JSON): ");
+                    var postRequest = new RequestModel
+                    {
+                        Url = postUrl,
+                        Method = "POST",
+                        Body = postBody
+                    };
+                    try
+                    {
+                        var postResponse = await new ApiRequester().SendRequestAsync(postRequest);
+                        ConsoleUtility.PrintSuccess($"Response: {postResponse}");
+                    }
+                    catch (Exception ex)
+                    {
+                        ConsoleUtility.PrintError($"Error: {ex.Message}");
+                    }
                     break;
                 case "3":
-                    // Handle PUT request
-                    ConsoleUtility.PrintSuccess("PUT request executed.");
+                    var putUrl = ConsoleUtility.ReadInput("Enter URL: ");
+                    var putBody = ConsoleUtility.ReadInput("Enter request body (JSON): ");
+                    var putRequest = new RequestModel
+                    {
+                        Url = putUrl,
+                        Method = "PUT",
+                        Body = putBody
+                    };
+                    try
+                    {
+                        var putResponse = await new ApiRequester().SendRequestAsync(putRequest);
+                        ConsoleUtility.PrintSuccess($"Response: {putResponse}");
+                    }
+                    catch (Exception ex)
+                    {
+                        ConsoleUtility.PrintError($"Error: {ex.Message}");
+                    }
                     break;
                 case "4":
-                    // Handle DELETE request
-                    ConsoleUtility.PrintSuccess("DELETE request executed.");
+                    var deleteUrl = ConsoleUtility.ReadInput("Enter URL: ");
+                    var deleteRequest = new RequestModel
+                    {
+                        Url = deleteUrl,
+                        Method = "DELETE"
+                    };
+                    try
+                    {
+                        var deleteResponse = await new ApiRequester().SendRequestAsync(deleteRequest);
+                        ConsoleUtility.PrintSuccess("Resource deleted successfully.");
+                    }
+                    catch (Exception ex)
+                    {
+                        ConsoleUtility.PrintError($"Error: {ex.Message}");
+                    }
                     break;
                 case "5":
                     // Exit the application
